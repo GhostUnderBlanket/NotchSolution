@@ -295,13 +295,22 @@ namespace E7.NotchSolution.Editor
             var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
-                var prefabSceneSimTargets = prefabStage.stageHandle.FindComponentsOfType<MonoBehaviour>()
-                    .OfType<INotchSimulatorTarget>();
-                foreach (var nst in prefabSceneSimTargets)
+                try
                 {
-                    nst.SimulatorUpdate(simulatedRectRelative, simulatedCutoutsRelative);
+                    var prefabSceneSimTargets = prefabStage.stageHandle.FindComponentsOfType<MonoBehaviour>().OfType<INotchSimulatorTarget>();
+
+                    foreach (var nst in prefabSceneSimTargets)
+                    {
+                        nst.SimulatorUpdate(simulatedRectRelative, simulatedCutoutsRelative);
+                    }
                 }
-            }
+                catch (Exception e)
+                {
+                    if (prefabStage != null)
+                        Debug.Log(prefabStage.name);
+                    Debug.LogWarning(e);
+                }
+            } 
         }
 
         /// <summary>
